@@ -1,9 +1,10 @@
 package com.example.completion_project.controller;
 
+import com.example.completion_project.mapper.MapToAPIResponse;
 import com.example.completion_project.model.dto.request.UserCreateDTO;
 import com.example.completion_project.model.dto.request.UserLoginDTO;
+import com.example.completion_project.model.dto.response.JwtResponse;
 import com.example.completion_project.model.dto.response.UserResponse;
-import com.example.completion_project.model.entity.User;
 import com.example.completion_project.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserCreateDTO req) {
         UserResponse res = authService.register(req);
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        return new ResponseEntity<>(MapToAPIResponse.mapTo(res, null, 201, "Thao tác thành công"), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO req) {
-        return ResponseEntity.ok(authService.login(req));
+        JwtResponse res = authService.login(req);
+        return new ResponseEntity<>(MapToAPIResponse.mapTo(res, null, 200, "Đăng nhập thành công"), HttpStatus.OK);
     }
 }
