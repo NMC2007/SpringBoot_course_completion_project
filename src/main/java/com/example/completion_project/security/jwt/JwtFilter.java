@@ -20,22 +20,29 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
     private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
         String token = getTokenFromRequest(request);
 
         try {
-            if (token != null) {
+            if (token != null
+                    && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 jwtProvider.validateToken(token);
 
                 String username = jwtProvider.getUsernameFromToken(token);
 
-                UserDetails userDetail = userDetailsService.loadUserByUsername(username);
+                UserDetails userDetail =
+                        userDetailsService.loadUserByUsername(username);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
@@ -44,7 +51,8 @@ public class JwtFilter extends OncePerRequestFilter {
                                 userDetail.getAuthorities()
                         );
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authentication);
             }
 
             filterChain.doFilter(request, response);
