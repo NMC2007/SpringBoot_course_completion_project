@@ -3,8 +3,10 @@ package com.example.completion_project.controller;
 import com.example.completion_project.mapper.MapToAPIResponse;
 import com.example.completion_project.model.dto.request.UserCreateDTO;
 import com.example.completion_project.model.dto.request.UserLoginDTO;
+import com.example.completion_project.model.dto.request.VerifyTokenRequest;
 import com.example.completion_project.model.dto.response.JwtResponse;
 import com.example.completion_project.model.dto.response.UserResponse;
+import com.example.completion_project.model.dto.response.VerifyTokenResponse;
 import com.example.completion_project.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,18 @@ public class AuthController {
     @GetMapping
     public String test() {
         return "Auth API public OK";
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyToken(@Valid @RequestBody VerifyTokenRequest req) {
+        VerifyTokenResponse res = authService.verifyToken(req);
+        return new ResponseEntity<>(MapToAPIResponse.mapTo(res, null, 200, "Thao tác thành công"), HttpStatus.OK);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        UserResponse res = authService.getCurrentUser();
+        return new ResponseEntity<>(MapToAPIResponse.mapTo(res, null, 200, "Thao tác thành công"), HttpStatus.OK);
     }
 
     @PostMapping("/register")

@@ -1,5 +1,6 @@
 package com.example.completion_project.advice;
 
+import com.example.completion_project.exception.AccessDeniedExceptionCustom;
 import com.example.completion_project.exception.BadCredentialsExceptionCustom;
 import com.example.completion_project.exception.DuplicateResourceException;
 import com.example.completion_project.exception.JwtExceptionCustom;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -26,6 +26,17 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(AccessDeniedExceptionCustom.class)
+    public ResponseEntity<?> handleAccessDenied(AccessDeniedExceptionCustom e) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("Lỗi phân quyền", e.getMessage());
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(null, res, 403, "Truy cập bị từ chối"),
+                HttpStatus.FORBIDDEN
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidation(MethodArgumentNotValidException e) {
 
@@ -35,7 +46,7 @@ public class GlobalExceptionHandler {
         });
 
         return new ResponseEntity<>(
-                MapToAPIResponse.mapTo(null, errors, 400, "Lỗi dữ liệu không hợp lệ"),
+                MapToAPIResponse.mapTo(null, errors, 400, "Lấy dữ liệu không thành công"),
                 HttpStatus.BAD_REQUEST
         );
     }

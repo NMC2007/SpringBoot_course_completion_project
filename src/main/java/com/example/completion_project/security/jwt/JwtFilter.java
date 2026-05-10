@@ -12,10 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tools.jackson.databind.ObjectMapper;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +22,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
     protected void doFilterInternal(
@@ -30,10 +30,9 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-
-        String token = getTokenFromRequest(request);
-
         try {
+            String token = getTokenFromRequest(request);
+
             if (token != null
                     && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -58,26 +57,32 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (JwtExceptionCustom ex) {
-
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json;charset=UTF-8");
-
-            response.getWriter().write(
-                    new ObjectMapper().writeValueAsString(
-                            Map.of(
-                                    "code", "TOKEN_ERROR",
-                                    "message", ex.getMessage()
-                            )
-                    )
+            handlerExceptionResolver.resolveException(
+                    request,
+                    response,
+                    null,
+                    ex
             );
         }
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
-        if (authorization != null && authorization.startsWith("Bearer ")) {
-            return authorization.substring(7);
+
+        if (authorization == null || authorization.isBlank()) {
+            return null;
         }
+
+        if (authorization.startsWith("Bearer ")) {
+            String token = authorization.substring(7).trim();
+
+            if (token.isBlank()) {
+                throw new JwtExceptionCustom("Token rỗng hoặc null");
+            }
+
+            return token;
+        }
+
         return null;
     }
 }

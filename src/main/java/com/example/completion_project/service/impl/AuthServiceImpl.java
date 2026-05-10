@@ -2,10 +2,13 @@ package com.example.completion_project.service.impl;
 
 import com.example.completion_project.exception.BadCredentialsExceptionCustom;
 import com.example.completion_project.exception.DuplicateResourceException;
+import com.example.completion_project.exception.JwtExceptionCustom;
 import com.example.completion_project.model.dto.request.UserCreateDTO;
 import com.example.completion_project.model.dto.request.UserLoginDTO;
+import com.example.completion_project.model.dto.request.VerifyTokenRequest;
 import com.example.completion_project.model.dto.response.JwtResponse;
 import com.example.completion_project.model.dto.response.UserResponse;
+import com.example.completion_project.model.dto.response.VerifyTokenResponse;
 import com.example.completion_project.model.entity.User;
 import com.example.completion_project.repository.UserRepository;
 import com.example.completion_project.security.jwt.JwtProvider;
@@ -16,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +28,7 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImplement implements AuthService {
+public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -78,5 +82,34 @@ public class AuthServiceImplement implements AuthService {
                 .build();
 
         return res;
+    }
+
+    @Override
+    public VerifyTokenResponse verifyToken(VerifyTokenRequest req) {
+        jwtProvider.validateToken(req.getToken());
+
+        String username = jwtProvider.getUsernameFromToken(req.getToken());
+
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new JwtExceptionCustom("User không tồn tại"));
+
+        return VerifyTokenResponse.builder()
+                .valid(true)
+                .username(user.getUsername())
+                .role(user.getRole())
+                .build();
+    }
+
+    @Override
+    public UserResponse getCurrentUser() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new BadCredentialsExceptionCustom("Không tìm thấy người dùng"));
+
+        return modelMapper.map(user, UserResponse.class);
     }
 }
