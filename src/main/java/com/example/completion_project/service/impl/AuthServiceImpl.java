@@ -15,6 +15,7 @@ import com.example.completion_project.security.jwt.JwtProvider;
 import com.example.completion_project.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private final ModelMapper modelMapper;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse register(UserCreateDTO req) {
         if (userRepository.existsByEmail(req.getEmail())) {
             throw new DuplicateResourceException("Email đã tồn tại");

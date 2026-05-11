@@ -31,4 +31,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             @Param("role") Role role,
             @Param("status") Boolean status
     );
+
+    @Query("""
+        select u
+        from User u
+        where u.id = :id
+        """)
+    Optional<User> getInfoUserById(@Param("id") Integer id);
 }

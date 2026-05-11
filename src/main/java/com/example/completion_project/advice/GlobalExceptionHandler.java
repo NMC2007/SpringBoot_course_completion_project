@@ -1,9 +1,6 @@
 package com.example.completion_project.advice;
 
-import com.example.completion_project.exception.AccessDeniedExceptionCustom;
-import com.example.completion_project.exception.BadCredentialsExceptionCustom;
-import com.example.completion_project.exception.DuplicateResourceException;
-import com.example.completion_project.exception.JwtExceptionCustom;
+import com.example.completion_project.exception.*;
 import com.example.completion_project.mapper.MapToAPIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +19,16 @@ public class GlobalExceptionHandler {
         res.put("Lỗi Token", e.getMessage());
         return new ResponseEntity<>(
                 MapToAPIResponse.mapTo(null, res, 401, "Lỗi xác thực Token"),
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsExceptionCustom.class)
+    public ResponseEntity<?> handleBadCredentials(BadCredentialsExceptionCustom e) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("Lỗi đăng nhập", e.getMessage());
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(null, res, 401, "Lỗi đăng nhập không thành công"),
                 HttpStatus.UNAUTHORIZED
         );
     }
@@ -51,16 +58,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(BadCredentialsExceptionCustom.class)
-    public ResponseEntity<?> handleBadCredentials(BadCredentialsExceptionCustom e) {
-        Map<String, Object> res = new HashMap<>();
-        res.put("Lỗi đăng nhập", e.getMessage());
-        return new ResponseEntity<>(
-                MapToAPIResponse.mapTo(null, res, 401, "Lỗi đăng nhập không thành công"),
-                HttpStatus.UNAUTHORIZED
-        );
-    }
-
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<?> handleDuplicate(DuplicateResourceException e) {
         Map<String, Object> res = new HashMap<>();
@@ -68,6 +65,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 MapToAPIResponse.mapTo(null, res, 409, "Lỗi dữ liệu trùng lặp"),
                 HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleNotFound(ResourceNotFoundException e) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("Lỗi không tìm thấy", e.getMessage());
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(null, res, 404, "Không tìm thấy tài nguyên"),
+                HttpStatus.NOT_FOUND
         );
     }
 }

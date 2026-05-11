@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserService {
     List<UserResponse> getAllUsers(Role role, Boolean status);
+    UserResponse getInfoUser(Integer id);
 }

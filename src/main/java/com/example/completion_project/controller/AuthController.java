@@ -37,12 +37,6 @@ public class AuthController {
         return new ResponseEntity<>(MapToAPIResponse.mapTo(res, null, 200, "Thao tác thành công"), HttpStatus.OK);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserCreateDTO req) {
-        UserResponse res = authService.register(req);
-        return new ResponseEntity<>(MapToAPIResponse.mapTo(res, null, 201, "Thao tác thành công"), HttpStatus.CREATED);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO req) {
         JwtResponse res = authService.login(req);
