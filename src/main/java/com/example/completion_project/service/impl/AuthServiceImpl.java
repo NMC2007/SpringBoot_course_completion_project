@@ -1,17 +1,18 @@
 package com.example.completion_project.service.impl;
 
-import com.example.completion_project.exception.BadCredentialsExceptionCustom;
-import com.example.completion_project.exception.DuplicateResourceException;
-import com.example.completion_project.exception.JwtExceptionCustom;
+import com.example.completion_project.exception.*;
+import com.example.completion_project.model.Enum.Role;
 import com.example.completion_project.model.dto.request.AuthRequest.UserCreateDTO;
 import com.example.completion_project.model.dto.request.AuthRequest.UserLoginDTO;
 import com.example.completion_project.model.dto.request.AuthRequest.VerifyTokenRequest;
+import com.example.completion_project.model.dto.request.AuthRequest.UpdatePasswordRequest;
 import com.example.completion_project.model.dto.response.JwtResponse;
 import com.example.completion_project.model.dto.response.UserResponse;
 import com.example.completion_project.model.dto.response.VerifyTokenResponse;
 import com.example.completion_project.model.entity.User;
 import com.example.completion_project.repository.UserRepository;
 import com.example.completion_project.security.jwt.JwtProvider;
+import com.example.completion_project.security.userdetail.CustomUserDetails;
 import com.example.completion_project.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -113,5 +114,59 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new BadCredentialsExceptionCustom("Không tìm thấy người dùng"));
 
         return modelMapper.map(user, UserResponse.class);
+    }
+
+    @Override
+    @PreAuthorize("hasAnyRole('OWNER','ADMIN')")
+    public String updateUserPassword(Integer userId, UpdatePasswordRequest req) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails currentUser =
+                (CustomUserDetails) authentication.getPrincipal();
+
+        User actor = userRepository.findUserByUsername(
+                currentUser.getUsername()
+        ).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        "Không tìm thấy người thao tác"
+                ));
+
+        User targetUser = userRepository.getUserById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Không tìm thấy người dùng"
+                        ));
+
+        if (
+                actor.getRole() == Role.ROLE_OWNER
+                        && targetUser.getRole() == Role.ROLE_OWNER
+        ) {
+            throw new AccessDeniedExceptionCustom(
+                    "OWNER không thể cập nhật mật khẩu OWNER khác"
+            );
+        }
+
+        if (
+                actor.getRole() == Role.ROLE_ADMIN
+                        &&
+                        (
+                                targetUser.getRole() == Role.ROLE_ADMIN
+                                        || targetUser.getRole() == Role.ROLE_OWNER
+                        )
+        ) {
+            throw new AccessDeniedExceptionCustom(
+                    "ADMIN không thể cập nhật mật khẩu ADMIN hoặc OWNER"
+            );
+        }
+
+        targetUser.setPasswordHash(
+                passwordEncoder.encode(req.getNewPassword())
+        );
+
+        userRepository.save(targetUser);
+
+        return "Cập nhật mật khẩu thành công";
     }
 }

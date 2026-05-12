@@ -2,6 +2,7 @@ package com.example.completion_project.controller;
 
 import com.example.completion_project.mapper.MapToAPIResponse;
 import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.dto.request.AuthRequest.UpdatePasswordRequest;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateRoleRequest;
 import com.example.completion_project.model.dto.request.AuthRequest.UserCreateDTO;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateStatusRequest;
@@ -123,6 +124,26 @@ public class UsersController {
                         null,
                         200,
                         "Xóa người dùng thành công"
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/{user_id}/password")
+    public ResponseEntity<?> updateUserPassword(
+            @PathVariable("user_id") Integer userId,
+            @Valid @RequestBody UpdatePasswordRequest req
+    ) {
+
+        String message =
+                authService.updateUserPassword(userId, req);;
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        message,
+                        null,
+                        200,
+                        "Cập nhật mật khẩu thành công"
                 ),
                 HttpStatus.OK
         );
