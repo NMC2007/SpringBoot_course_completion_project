@@ -4,6 +4,7 @@ import com.example.completion_project.exception.*;
 import com.example.completion_project.mapper.MapToAPIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -65,6 +66,43 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 MapToAPIResponse.mapTo(null, res, 409, "Lỗi dữ liệu trùng lặp"),
                 HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException e
+    ) {
+
+        Map<String, Object> res = new HashMap<>();
+
+        String message = e.getMostSpecificCause().getMessage();
+
+        if (message.contains("Boolean")) {
+            res.put(
+                    "Lỗi dữ liệu",
+                    "Giá trị truyền vào phải là true hoặc false"
+            );
+        } else if (message.contains("Role")) {
+            res.put(
+                    "Lỗi dữ liệu",
+                    "Role không hợp lệ"
+            );
+        } else {
+            res.put(
+                    "Lỗi dữ liệu",
+                    "Dữ liệu gửi lên không hợp lệ hoặc bị bỏ trống"
+            );
+        }
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        null,
+                        res,
+                        400,
+                        "Dữ liệu không hợp lệ"
+                ),
+                HttpStatus.BAD_REQUEST
         );
     }
 

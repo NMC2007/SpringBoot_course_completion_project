@@ -37,5 +37,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
         from User u
         where u.id = :id
         """)
-    Optional<User> getInfoUserById(@Param("id") Integer id);
+    Optional<User> getUserById(@Param("id") Integer id);
 }

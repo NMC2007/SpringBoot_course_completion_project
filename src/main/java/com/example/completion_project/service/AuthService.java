@@ -1,8 +1,8 @@
 package com.example.completion_project.service;
 
-import com.example.completion_project.model.dto.request.UserCreateDTO;
-import com.example.completion_project.model.dto.request.UserLoginDTO;
-import com.example.completion_project.model.dto.request.VerifyTokenRequest;
+import com.example.completion_project.model.dto.request.AuthRequest.UserCreateDTO;
+import com.example.completion_project.model.dto.request.AuthRequest.UserLoginDTO;
+import com.example.completion_project.model.dto.request.AuthRequest.VerifyTokenRequest;
 import com.example.completion_project.model.dto.response.JwtResponse;
 import com.example.completion_project.model.dto.response.UserResponse;
 import com.example.completion_project.model.dto.response.VerifyTokenResponse;
