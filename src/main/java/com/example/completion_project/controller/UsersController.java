@@ -6,6 +6,7 @@ import com.example.completion_project.model.dto.request.AuthRequest.UpdatePasswo
 import com.example.completion_project.model.dto.request.UserRequest.UpdateRoleRequest;
 import com.example.completion_project.model.dto.request.AuthRequest.UserCreateDTO;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateStatusRequest;
+import com.example.completion_project.model.dto.request.UserRequest.UpdateUserInfoRequest;
 import com.example.completion_project.model.dto.response.UserResponse;
 import com.example.completion_project.service.AuthService;
 import com.example.completion_project.service.UserService;
@@ -144,6 +145,33 @@ public class UsersController {
                         null,
                         200,
                         "Cập nhật mật khẩu thành công"
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/{user_id}")
+    public ResponseEntity<?> updateUserInfo(
+            @PathVariable("user_id") Integer userId,
+            @RequestBody(required = false)
+            @Valid UpdateUserInfoRequest req
+    ) {
+
+        if (req == null) {
+            throw new IllegalArgumentException(
+                    "Không có dữ liệu cập nhật"
+            );
+        }
+
+        UserResponse user =
+                userService.updateUserInfo(userId, req);
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        user,
+                        null,
+                        200,
+                        "Cập nhật thông tin thành công"
                 ),
                 HttpStatus.OK
         );

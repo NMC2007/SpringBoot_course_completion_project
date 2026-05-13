@@ -106,6 +106,26 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgument(
+            IllegalArgumentException e
+    ) {
+
+        Map<String, Object> res = new HashMap<>();
+
+        res.put("Lỗi dữ liệu", e.getMessage());
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        null,
+                        res,
+                        400,
+                        "Dữ liệu không hợp lệ"
+                ),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> handleNotFound(ResourceNotFoundException e) {
         Map<String, Object> res = new HashMap<>();
