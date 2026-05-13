@@ -4,6 +4,7 @@ import com.example.completion_project.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -41,8 +42,23 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+
+//                        =============================================================================================
+//                       Users
                         .requestMatchers("/api/v1/users/**")
                         .hasAnyRole("ADMIN", "TEACHER")
+
+
+//                        =============================================================================================
+//                        Courses
+                        .requestMatchers(HttpMethod.GET, "/api/v1/courses/**")
+                        .authenticated()
+
+                        .requestMatchers("/api/v1/courses/**")
+                        .hasAnyRole("ADMIN", "TEACHER")
+
+
+//                        =============================================================================================
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

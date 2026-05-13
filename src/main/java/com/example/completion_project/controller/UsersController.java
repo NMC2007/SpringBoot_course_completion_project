@@ -7,7 +7,7 @@ import com.example.completion_project.model.dto.request.UserRequest.UpdateRoleRe
 import com.example.completion_project.model.dto.request.AuthRequest.UserCreateDTO;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateStatusRequest;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateUserInfoRequest;
-import com.example.completion_project.model.dto.response.UserResponse;
+import com.example.completion_project.model.dto.response.userResponsr.UserResponse;
 import com.example.completion_project.service.AuthService;
 import com.example.completion_project.service.UserService;
 import jakarta.validation.Valid;

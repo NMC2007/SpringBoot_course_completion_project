@@ -6,9 +6,9 @@ import com.example.completion_project.model.dto.request.AuthRequest.UserCreateDT
 import com.example.completion_project.model.dto.request.AuthRequest.UserLoginDTO;
 import com.example.completion_project.model.dto.request.AuthRequest.VerifyTokenRequest;
 import com.example.completion_project.model.dto.request.AuthRequest.UpdatePasswordRequest;
-import com.example.completion_project.model.dto.response.JwtResponse;
-import com.example.completion_project.model.dto.response.UserResponse;
-import com.example.completion_project.model.dto.response.VerifyTokenResponse;
+import com.example.completion_project.model.dto.response.authRestponse.JwtResponse;
+import com.example.completion_project.model.dto.response.userResponsr.UserResponse;
+import com.example.completion_project.model.dto.response.authRestponse.VerifyTokenResponse;
 import com.example.completion_project.model.entity.User;
 import com.example.completion_project.repository.UserRepository;
 import com.example.completion_project.security.jwt.JwtProvider;

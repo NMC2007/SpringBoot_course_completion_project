@@ -4,7 +4,7 @@ import com.example.completion_project.model.Enum.Role;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateRoleRequest;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateStatusRequest;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateUserInfoRequest;
-import com.example.completion_project.model.dto.response.UserResponse;
+import com.example.completion_project.model.dto.response.userResponsr.UserResponse;
 
 import java.util.List;
 
