@@ -4,8 +4,8 @@ import com.example.completion_project.exception.AccessDeniedExceptionCustom;
 import com.example.completion_project.exception.DuplicateResourceException;
 import com.example.completion_project.exception.ResourceNotFoundException;
 import com.example.completion_project.model.Enum.Role;
-import com.example.completion_project.model.dto.request.UserRequest.UpdateRoleRequest;
-import com.example.completion_project.model.dto.request.UserRequest.UpdateStatusRequest;
+import com.example.completion_project.model.dto.request.UserRequest.UpdateUserRoleRequest;
+import com.example.completion_project.model.dto.request.UserRequest.UpdateUserStatusRequest;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateUserInfoRequest;
 import com.example.completion_project.model.dto.response.userResponsr.UserResponse;
 import com.example.completion_project.model.entity.User;
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse updateUserRole(Integer userId, UpdateRoleRequest req) {
+    public UserResponse updateUserRole(Integer userId, UpdateUserRoleRequest req) {
 
         User user = getUserById(userId);
 
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse updateUserStatus(Integer userId, UpdateStatusRequest req) {
+    public UserResponse updateUserStatus(Integer userId, UpdateUserStatusRequest req) {
 
         User user = getUserById(userId);
 

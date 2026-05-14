@@ -1,13 +1,12 @@
 package com.example.completion_project.model.dto.request.UserRequest;
 
-import com.example.completion_project.model.Enum.Role;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateRoleRequest {
-    @NotNull(message = "Role không được để trống")
-    private Role role;
+public class UpdateUserStatusRequest {
+    @NotNull(message = "Trạng thái không được để trống")
+    private Boolean isActive;
 }

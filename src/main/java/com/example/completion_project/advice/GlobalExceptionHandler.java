@@ -5,6 +5,7 @@ import com.example.completion_project.mapper.MapToAPIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,6 +15,29 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<?> handleMethodNotSupported(
+            HttpRequestMethodNotSupportedException e
+    ) {
+
+        Map<String, Object> res = new HashMap<>();
+
+        res.put(
+                "Lỗi phương thức",
+                "Phương thức HTTP không được hỗ trợ"
+        );
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        null,
+                        res,
+                        405,
+                        "Method Not Allowed"
+                ),
+                HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
     @ExceptionHandler(JwtExceptionCustom.class)
     public ResponseEntity<?> handleJwtException(JwtExceptionCustom e) {
         Map<String, Object> res = new HashMap<>();

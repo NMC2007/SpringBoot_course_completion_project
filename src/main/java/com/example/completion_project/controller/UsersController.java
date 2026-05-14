@@ -3,9 +3,9 @@ package com.example.completion_project.controller;
 import com.example.completion_project.mapper.MapToAPIResponse;
 import com.example.completion_project.model.Enum.Role;
 import com.example.completion_project.model.dto.request.AuthRequest.UpdatePasswordRequest;
-import com.example.completion_project.model.dto.request.UserRequest.UpdateRoleRequest;
+import com.example.completion_project.model.dto.request.UserRequest.UpdateUserRoleRequest;
 import com.example.completion_project.model.dto.request.AuthRequest.UserCreateDTO;
-import com.example.completion_project.model.dto.request.UserRequest.UpdateStatusRequest;
+import com.example.completion_project.model.dto.request.UserRequest.UpdateUserStatusRequest;
 import com.example.completion_project.model.dto.request.UserRequest.UpdateUserInfoRequest;
 import com.example.completion_project.model.dto.response.userResponsr.UserResponse;
 import com.example.completion_project.service.AuthService;
@@ -76,7 +76,7 @@ public class UsersController {
     @PutMapping("/{user_id}/role")
     public ResponseEntity<?> updateUserRole(
             @PathVariable("user_id") Integer userId,
-            @Valid @RequestBody UpdateRoleRequest req
+            @Valid @RequestBody UpdateUserRoleRequest req
     ) {
 
         UserResponse user = userService.updateUserRole(userId, req);
@@ -95,7 +95,7 @@ public class UsersController {
     @PutMapping("/{user_id}/status")
     public ResponseEntity<?> updateUserStatus(
             @PathVariable("user_id") Integer userId,
-            @Valid @RequestBody UpdateStatusRequest req
+            @Valid @RequestBody UpdateUserStatusRequest req
     ) {
 
         UserResponse user =
