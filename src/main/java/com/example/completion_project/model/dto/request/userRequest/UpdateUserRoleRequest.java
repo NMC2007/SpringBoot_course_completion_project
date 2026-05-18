@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.UserRequest;
+package com.example.completion_project.model.dto.request.userRequest;
 
 import com.example.completion_project.model.Enum.Role;
 import jakarta.validation.constraints.NotNull;

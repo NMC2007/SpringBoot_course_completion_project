@@ -6,7 +6,7 @@ import com.example.completion_project.model.Enum.CourseStatus;
 import com.example.completion_project.model.Enum.Role;
 import com.example.completion_project.model.dto.request.courseRequest.CourseCreateRequest;
 import com.example.completion_project.model.dto.request.courseRequest.UpdateStatusCourseRequest;
-import com.example.completion_project.model.dto.response.CourseResponse.CourseResponse;
+import com.example.completion_project.model.dto.response.courseResponse.CourseResponse;
 import com.example.completion_project.model.entity.Course;
 import com.example.completion_project.model.entity.User;
 import com.example.completion_project.repository.CourseRepository;

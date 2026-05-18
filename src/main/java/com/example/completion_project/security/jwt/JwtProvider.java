@@ -62,7 +62,7 @@ public class JwtProvider {
         } catch (MalformedJwtException e) {
             throw new JwtExceptionCustom("Token không đúng định dạng");
         } catch (SignatureException e) {
-            throw new JwtExceptionCustom("Chữ ký không hợp lệ");
+            throw new JwtExceptionCustom("Token không hợp lệ");
         } catch (IllegalArgumentException e) {
             throw new JwtExceptionCustom("Token rỗng hoặc null");
         }

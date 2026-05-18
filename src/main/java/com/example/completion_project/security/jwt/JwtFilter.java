@@ -21,7 +21,9 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+
     private final UserDetailsService userDetailsService;
+
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
@@ -31,17 +33,29 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         try {
+            String path = request.getRequestURI();
+
+            // bỏ qua auth api
+            if (path.startsWith("/api/v1/auth")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             String token = getTokenFromRequest(request);
 
-            if (token != null
-                    && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // protected api mà không có token
+            if (token == null) {
+                throw new JwtExceptionCustom(
+                        "Token không được để trống"
+                );
+            }
+
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 jwtProvider.validateToken(token);
 
                 String username = jwtProvider.getUsernameFromToken(token);
-
-                UserDetails userDetail =
-                        userDetailsService.loadUserByUsername(username);
+                UserDetails userDetail = userDetailsService.loadUserByUsername(username);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
@@ -50,8 +64,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                 userDetail.getAuthorities()
                         );
 
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
             filterChain.doFilter(request, response);
@@ -68,21 +81,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
-
         if (authorization == null || authorization.isBlank()) {
             return null;
         }
 
-        if (authorization.startsWith("Bearer ")) {
-            String token = authorization.substring(7).trim();
-
-            if (token.isBlank()) {
-                throw new JwtExceptionCustom("Token rỗng hoặc null");
-            }
-
-            return token;
+        if (!authorization.startsWith("Bearer ")) {
+            throw new JwtExceptionCustom(
+                    "Authorization header không hợp lệ"
+            );
         }
 
-        return null;
+        String token = authorization.substring(7).trim();
+
+        if (token.isBlank()) {
+            throw new JwtExceptionCustom(
+                    "Token rỗng hoặc null"
+            );
+        }
+        return token;
     }
 }

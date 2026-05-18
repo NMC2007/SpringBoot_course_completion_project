@@ -3,12 +3,15 @@ package com.example.completion_project.controller;
 import com.example.completion_project.mapper.MapToAPIResponse;
 import com.example.completion_project.model.Enum.Role;
 import com.example.completion_project.model.dto.request.AuthRequest.UpdatePasswordRequest;
-import com.example.completion_project.model.dto.request.UserRequest.UpdateUserRoleRequest;
+import com.example.completion_project.model.dto.request.lessonRequest.LessonCreateRequest;
+import com.example.completion_project.model.dto.request.userRequest.UpdateUserRoleRequest;
 import com.example.completion_project.model.dto.request.AuthRequest.UserCreateDTO;
-import com.example.completion_project.model.dto.request.UserRequest.UpdateUserStatusRequest;
-import com.example.completion_project.model.dto.request.UserRequest.UpdateUserInfoRequest;
+import com.example.completion_project.model.dto.request.userRequest.UpdateUserStatusRequest;
+import com.example.completion_project.model.dto.request.userRequest.UpdateUserInfoRequest;
+import com.example.completion_project.model.dto.response.lessonResponse.LessonResponse;
 import com.example.completion_project.model.dto.response.userResponsr.UserResponse;
 import com.example.completion_project.service.AuthService;
+import com.example.completion_project.service.LessonService;
 import com.example.completion_project.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersController {
     private final UserService userService;
+    private final LessonService lessonService;
     private final AuthService authService;
 
     @GetMapping
@@ -174,6 +178,29 @@ public class UsersController {
                         "Cập nhật thông tin thành công"
                 ),
                 HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/{course_id}/lessons")
+    public ResponseEntity<?> createLesson(
+            @PathVariable("course_id")
+            Integer courseId,
+            @RequestBody @Valid LessonCreateRequest req
+    ) {
+
+        LessonResponse lesson =
+                lessonService.createLesson(courseId, req);
+
+        return new ResponseEntity<>(
+
+                MapToAPIResponse.mapTo(
+                        lesson,
+                        null,
+                        201,
+                        "Tạo bài học thành công"
+                ),
+
+                HttpStatus.CREATED
         );
     }
 }
