@@ -3,10 +3,13 @@ package com.example.completion_project.controller;
 import com.example.completion_project.mapper.MapToAPIResponse;
 import com.example.completion_project.model.Enum.CourseStatus;
 import com.example.completion_project.model.dto.request.courseReq.CourseCreateRequest;
+import com.example.completion_project.model.dto.request.courseReq.UpdateCourseRequest;
 import com.example.completion_project.model.dto.request.courseReq.UpdateStatusCourseRequest;
 import com.example.completion_project.model.dto.response.courseRes.CourseInfoResponse;
 import com.example.completion_project.model.dto.response.courseRes.CourseResponse;
+import com.example.completion_project.model.dto.response.lessonRes.LessonResponse;
 import com.example.completion_project.service.CourseService;
+import com.example.completion_project.service.LessonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
+    private final LessonService lessonService;
 
     @GetMapping
     public ResponseEntity<?> getAllCourses(
@@ -109,6 +113,55 @@ public class CourseController {
                         null,
                         200,
                         "Lấy thông tin khóa học thành công"
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{course_id}/lessons")
+    public ResponseEntity<?> getPublishedLessonsByCourse(
+            @PathVariable("course_id")
+            Integer courseId
+    ) {
+
+        List<LessonResponse> lessons =
+                lessonService.getPublishedLessonsByCourse(
+                        courseId
+                );
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        lessons,
+                        null,
+                        200,
+                        "Lấy danh sách bài học thành công"
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/{course_id}")
+    public ResponseEntity<?> updateCourse(
+            @PathVariable("course_id")
+            Integer courseId,
+            @RequestBody(required = false)
+            @Valid UpdateCourseRequest req
+    ) {
+
+        if (req == null) {
+            throw new IllegalArgumentException(
+                    "Không có dữ liệu cập nhật"
+            );
+        }
+
+        CourseResponse course = courseService.updateCourse(courseId, req);
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        course,
+                        null,
+                        200,
+                        "Cập nhật khóa học thành công"
                 ),
                 HttpStatus.OK
         );

@@ -5,6 +5,7 @@ import com.example.completion_project.exception.ResourceNotFoundException;
 import com.example.completion_project.model.Enum.CourseStatus;
 import com.example.completion_project.model.Enum.Role;
 import com.example.completion_project.model.dto.request.courseReq.CourseCreateRequest;
+import com.example.completion_project.model.dto.request.courseReq.UpdateCourseRequest;
 import com.example.completion_project.model.dto.request.courseReq.UpdateStatusCourseRequest;
 import com.example.completion_project.model.dto.response.courseRes.CourseInfoResponse;
 import com.example.completion_project.model.dto.response.courseRes.CourseResponse;
@@ -169,6 +170,111 @@ public class CourseServiceImpl implements CourseService {
                         .toList();
 
         res.setLessons(lessonResponses);
+
+        return res;
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public CourseResponse updateCourse(
+            Integer courseId,
+            UpdateCourseRequest req
+    ) {
+
+        // check body rỗng
+        if (
+                req.getTitle() == null
+                        &&
+                        req.getDescription() == null
+                        &&
+                        req.getTeacherId() == null
+                        &&
+                        req.getPrice() == null
+                        &&
+                        req.getDurationHours() == null
+                        &&
+                        req.getStatus() == null
+        ) {
+            throw new IllegalArgumentException(
+                    "Không có dữ liệu cập nhật"
+            );
+        }
+
+        Course course = courseRepository
+                .findById(courseId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Không tìm thấy khóa học"
+                        ));
+
+        // update title
+        if (
+                req.getTitle() != null
+                        &&
+                        !req.getTitle().isBlank()
+        ) {
+            course.setTitle(req.getTitle());
+        }
+
+        // update description
+        if (
+                req.getDescription() != null
+                        &&
+                        !req.getDescription().isBlank()
+        ) {
+            course.setDescription(req.getDescription());
+        }
+
+        // update teacher
+        if (req.getTeacherId() != null) {
+
+            User teacher = userRepository
+                    .findById(req.getTeacherId())
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "Không tìm thấy giáo viên"
+                            ));
+
+            // check role teacher
+            if (teacher.getRole() != Role.ROLE_TEACHER) {
+                throw new AccessDeniedExceptionCustom(
+                        "Người này không phải giáo viên"
+                );
+            }
+
+            course.setTeacher(teacher);
+        }
+
+        // update price
+        if (req.getPrice() != null) {
+            course.setPrice(req.getPrice());
+        }
+
+        // update duration
+        if (req.getDurationHours() != null) {
+            course.setDurationHours(
+                    req.getDurationHours()
+            );
+        }
+
+        // update status
+        if (req.getStatus() != null) {
+            course.setStatus(req.getStatus());
+        }
+
+        // updatedAt tự update do @UpdateTimestamp
+        Course updatedCourse =
+                courseRepository.save(course);
+
+        CourseResponse res =
+                modelMapper.map(
+                        updatedCourse,
+                        CourseResponse.class
+                );
+
+        res.setTeacherUsername(
+                updatedCourse.getTeacher().getUsername()
+        );
 
         return res;
     }

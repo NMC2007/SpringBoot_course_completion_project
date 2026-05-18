@@ -13,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LessonServiceImpl implements LessonService {
@@ -58,5 +60,32 @@ public class LessonServiceImpl implements LessonService {
         res.setCourseTitle(course.getTitle());
 
         return res;
+    }
+
+    @Override
+    public List<LessonResponse> getPublishedLessonsByCourse(Integer courseId) {
+        // check course tồn tại
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Không tìm thấy khóa học"
+                        ));
+
+        List<Lesson> lessons = lessonRepository.findPublishedLessonsByCourse(courseId);
+
+        return lessons.stream()
+                .map(lesson -> {
+                    LessonResponse res =
+                            modelMapper.map(
+                                    lesson,
+                                    LessonResponse.class
+                            );
+
+                    res.setCourseId(course.getId());
+                    res.setCourseTitle(course.getTitle());
+
+                    return res;
+                })
+                .toList();
     }
 }
