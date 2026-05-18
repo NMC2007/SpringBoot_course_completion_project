@@ -6,7 +6,9 @@ import com.example.completion_project.model.Enum.CourseStatus;
 import com.example.completion_project.model.Enum.Role;
 import com.example.completion_project.model.dto.request.courseReq.CourseCreateRequest;
 import com.example.completion_project.model.dto.request.courseReq.UpdateStatusCourseRequest;
+import com.example.completion_project.model.dto.response.courseRes.CourseInfoResponse;
 import com.example.completion_project.model.dto.response.courseRes.CourseResponse;
+import com.example.completion_project.model.dto.response.lessonRes.LessonInfoResponse;
 import com.example.completion_project.model.entity.Course;
 import com.example.completion_project.model.entity.User;
 import com.example.completion_project.repository.CourseRepository;
@@ -123,6 +125,50 @@ public class CourseServiceImpl implements CourseService {
         res.setTeacherUsername(
                 updatedCourse.getTeacher().getUsername()
         );
+
+        return res;
+    }
+
+    @Override
+    public CourseInfoResponse getPublishedCourseDetail(Integer courseId) {
+
+        Course course =
+                courseRepository.findCourseDetail(courseId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Không tìm thấy khóa học"
+                                ));
+
+        // check publish
+        if (course.getStatus() != CourseStatus.PUBLISHED) {
+            throw new AccessDeniedExceptionCustom(
+                    "Khóa học chưa được công bố"
+            );
+        }
+
+        CourseInfoResponse res =
+                modelMapper.map(
+                        course,
+                        CourseInfoResponse.class
+                );
+
+        res.setTeacherUsername(
+                course.getTeacher().getUsername()
+        );
+
+        List<LessonInfoResponse> lessonResponses =
+                course.getLessons()
+                        .stream()
+
+                        .map(lesson ->
+                                modelMapper.map(
+                                        lesson,
+                                        LessonInfoResponse.class
+                                )
+                        )
+                        .toList();
+
+        res.setLessons(lessonResponses);
 
         return res;
     }

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer> {
@@ -20,5 +21,16 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
             """)
     List<Course> findAllCourses(
             @Param("status") CourseStatus status
+    );
+
+    @Query("""
+        select distinct c
+        from Course c
+        left join fetch c.lessons l
+        where c.id = :courseId
+        order by l.orderIndex asc
+        """)
+    Optional<Course> findCourseDetail(
+            @Param("courseId") Integer courseId
     );
 }

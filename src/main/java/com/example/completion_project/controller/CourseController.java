@@ -4,6 +4,7 @@ import com.example.completion_project.mapper.MapToAPIResponse;
 import com.example.completion_project.model.Enum.CourseStatus;
 import com.example.completion_project.model.dto.request.courseReq.CourseCreateRequest;
 import com.example.completion_project.model.dto.request.courseReq.UpdateStatusCourseRequest;
+import com.example.completion_project.model.dto.response.courseRes.CourseInfoResponse;
 import com.example.completion_project.model.dto.response.courseRes.CourseResponse;
 import com.example.completion_project.service.CourseService;
 import jakarta.validation.Valid;
@@ -90,6 +91,24 @@ public class CourseController {
                         null,
                         200,
                         "Cập nhật trạng thái khóa học thành công"
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{course_id}")
+    public ResponseEntity<?> getCourseDetail(
+            @PathVariable("course_id")
+            Integer courseId
+    ) {
+        CourseInfoResponse course = courseService.getPublishedCourseDetail(courseId);
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        course,
+                        null,
+                        200,
+                        "Lấy thông tin khóa học thành công"
                 ),
                 HttpStatus.OK
         );
