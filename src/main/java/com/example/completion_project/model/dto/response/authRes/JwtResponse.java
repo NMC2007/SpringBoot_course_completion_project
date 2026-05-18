@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.response.authRestponse;
+package com.example.completion_project.model.dto.response.authRes;
 
 import com.example.completion_project.model.Enum.Role;
 import lombok.Builder;

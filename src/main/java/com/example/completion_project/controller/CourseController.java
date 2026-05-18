@@ -2,9 +2,9 @@ package com.example.completion_project.controller;
 
 import com.example.completion_project.mapper.MapToAPIResponse;
 import com.example.completion_project.model.Enum.CourseStatus;
-import com.example.completion_project.model.dto.request.courseRequest.CourseCreateRequest;
-import com.example.completion_project.model.dto.request.courseRequest.UpdateStatusCourseRequest;
-import com.example.completion_project.model.dto.response.courseResponse.CourseResponse;
+import com.example.completion_project.model.dto.request.courseReq.CourseCreateRequest;
+import com.example.completion_project.model.dto.request.courseReq.UpdateStatusCourseRequest;
+import com.example.completion_project.model.dto.response.courseRes.CourseResponse;
 import com.example.completion_project.service.CourseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

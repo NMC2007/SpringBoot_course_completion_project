@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.response.courseResponse;
+package com.example.completion_project.model.dto.response.courseRes;
 
 import com.example.completion_project.model.Enum.CourseStatus;
 import lombok.Getter;

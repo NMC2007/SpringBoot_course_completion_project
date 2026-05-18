@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.AuthRequest;
+package com.example.completion_project.model.dto.request.authReq;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

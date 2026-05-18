@@ -1,11 +1,11 @@
 package com.example.completion_project.controller;
 
 import com.example.completion_project.mapper.MapToAPIResponse;
-import com.example.completion_project.model.dto.request.AuthRequest.UserLoginDTO;
-import com.example.completion_project.model.dto.request.AuthRequest.VerifyTokenRequest;
-import com.example.completion_project.model.dto.response.authRestponse.JwtResponse;
-import com.example.completion_project.model.dto.response.userResponsr.UserResponse;
-import com.example.completion_project.model.dto.response.authRestponse.VerifyTokenResponse;
+import com.example.completion_project.model.dto.request.authReq.UserLoginDTO;
+import com.example.completion_project.model.dto.request.authReq.VerifyTokenRequest;
+import com.example.completion_project.model.dto.response.authRes.JwtResponse;
+import com.example.completion_project.model.dto.response.userRes.UserResponse;
+import com.example.completion_project.model.dto.response.authRes.VerifyTokenResponse;
 import com.example.completion_project.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

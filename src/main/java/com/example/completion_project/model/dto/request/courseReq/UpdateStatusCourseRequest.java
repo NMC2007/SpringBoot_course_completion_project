@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.courseRequest;
+package com.example.completion_project.model.dto.request.courseReq;
 
 import com.example.completion_project.model.Enum.CourseStatus;
 import jakarta.validation.constraints.NotNull;

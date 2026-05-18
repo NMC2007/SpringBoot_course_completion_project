@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.lessonRequest;
+package com.example.completion_project.model.dto.request.lessonReq;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

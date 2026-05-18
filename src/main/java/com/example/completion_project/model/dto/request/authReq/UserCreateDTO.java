@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.AuthRequest;
+package com.example.completion_project.model.dto.request.authReq;
 
 import com.example.completion_project.model.Enum.Role;
 import jakarta.validation.constraints.*;

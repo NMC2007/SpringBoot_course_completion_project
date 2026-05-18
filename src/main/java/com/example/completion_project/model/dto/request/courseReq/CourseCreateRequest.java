@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.courseRequest;
+package com.example.completion_project.model.dto.request.courseReq;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;

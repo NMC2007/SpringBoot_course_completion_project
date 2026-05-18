@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.userRequest;
+package com.example.completion_project.model.dto.request.userReq;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
