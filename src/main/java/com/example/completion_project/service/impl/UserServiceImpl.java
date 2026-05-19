@@ -3,7 +3,7 @@ package com.example.completion_project.service.impl;
 import com.example.completion_project.exception.AccessDeniedExceptionCustom;
 import com.example.completion_project.exception.DuplicateResourceException;
 import com.example.completion_project.exception.ResourceNotFoundException;
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.Role;
 import com.example.completion_project.model.dto.request.userReq.UpdateUserRoleRequest;
 import com.example.completion_project.model.dto.request.userReq.UpdateUserStatusRequest;
 import com.example.completion_project.model.dto.request.userReq.UpdateUserInfoRequest;

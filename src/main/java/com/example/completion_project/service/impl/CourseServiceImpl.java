@@ -2,8 +2,8 @@ package com.example.completion_project.service.impl;
 
 import com.example.completion_project.exception.AccessDeniedExceptionCustom;
 import com.example.completion_project.exception.ResourceNotFoundException;
-import com.example.completion_project.model.Enum.CourseStatus;
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.CourseStatus;
+import com.example.completion_project.model.enums.Role;
 import com.example.completion_project.model.dto.request.courseReq.CourseCreateRequest;
 import com.example.completion_project.model.dto.request.courseReq.UpdateCourseRequest;
 import com.example.completion_project.model.dto.request.courseReq.UpdateStatusCourseRequest;
@@ -32,9 +32,39 @@ public class CourseServiceImpl implements CourseService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<CourseResponse> getAllCourses(CourseStatus status) {
+    public List<CourseResponse> getAllCourses(
+            CourseStatus status,
+            String keyword,
+            Integer teacherId
+    ) {
 
-        List<Course> courses = courseRepository.findAllCourses(status);
+        // tránh null keyword gây lỗi SQL
+        if (keyword == null) {
+            keyword = "";
+        }
+
+        // check teacher
+        if (teacherId != null) {
+
+            User teacher = userRepository.findById(teacherId)
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "Không tìm thấy giáo viên"
+                            ));
+
+            if (teacher.getRole() != Role.ROLE_TEACHER) {
+                throw new AccessDeniedExceptionCustom(
+                        "Người này không phải giáo viên"
+                );
+            }
+        }
+
+        List<Course> courses =
+                courseRepository.findCourses(
+                        status,
+                        keyword,
+                        teacherId
+                );
 
         return courses.stream()
                 .map(course -> {
@@ -192,8 +222,6 @@ public class CourseServiceImpl implements CourseService {
                         req.getPrice() == null
                         &&
                         req.getDurationHours() == null
-                        &&
-                        req.getStatus() == null
         ) {
             throw new IllegalArgumentException(
                     "Không có dữ liệu cập nhật"
@@ -255,11 +283,6 @@ public class CourseServiceImpl implements CourseService {
             course.setDurationHours(
                     req.getDurationHours()
             );
-        }
-
-        // update status
-        if (req.getStatus() != null) {
-            course.setStatus(req.getStatus());
         }
 
         // updatedAt tự update do @UpdateTimestamp

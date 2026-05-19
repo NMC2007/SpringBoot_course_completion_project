@@ -1,6 +1,6 @@
 package com.example.completion_project.model.dto.response.courseRes;
 
-import com.example.completion_project.model.Enum.CourseStatus;
+import com.example.completion_project.model.enums.CourseStatus;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,6 @@
 package com.example.completion_project.model.dto.response.authRes;
 
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

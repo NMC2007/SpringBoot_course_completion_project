@@ -1,6 +1,6 @@
 package com.example.completion_project.model.entity;
 
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

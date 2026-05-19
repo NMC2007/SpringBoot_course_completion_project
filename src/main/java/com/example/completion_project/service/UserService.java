@@ -1,6 +1,6 @@
 package com.example.completion_project.service;
 
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.Role;
 import com.example.completion_project.model.dto.request.userReq.UpdateUserRoleRequest;
 import com.example.completion_project.model.dto.request.userReq.UpdateUserStatusRequest;
 import com.example.completion_project.model.dto.request.userReq.UpdateUserInfoRequest;

@@ -1,6 +1,6 @@
 package com.example.completion_project.model.dto.request.authReq;
 
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;

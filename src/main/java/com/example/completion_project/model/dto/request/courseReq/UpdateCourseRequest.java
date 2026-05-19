@@ -1,6 +1,5 @@
 package com.example.completion_project.model.dto.request.courseReq;
 
-import com.example.completion_project.model.Enum.CourseStatus;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -37,6 +36,4 @@ public class UpdateCourseRequest {
             message = "Thời lượng khóa học phải lớn hơn 0"
     )
     private Integer durationHours;
-
-    private CourseStatus status;
 }

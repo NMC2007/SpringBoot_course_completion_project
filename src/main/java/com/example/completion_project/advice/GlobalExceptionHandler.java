@@ -160,4 +160,21 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND
         );
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception e) {
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("error", e.getMessage());
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        null,
+                        res,
+                        500,
+                        "Lỗi hệ thống"
+                ),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
 }

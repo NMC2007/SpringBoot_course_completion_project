@@ -1,6 +1,6 @@
 package com.example.completion_project.model.dto.response.userRes;
 
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.Role;
 import lombok.*;
 
 @Getter

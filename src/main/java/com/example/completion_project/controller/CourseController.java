@@ -1,7 +1,7 @@
 package com.example.completion_project.controller;
 
 import com.example.completion_project.mapper.MapToAPIResponse;
-import com.example.completion_project.model.Enum.CourseStatus;
+import com.example.completion_project.model.enums.CourseStatus;
 import com.example.completion_project.model.dto.request.courseReq.CourseCreateRequest;
 import com.example.completion_project.model.dto.request.courseReq.UpdateCourseRequest;
 import com.example.completion_project.model.dto.request.courseReq.UpdateStatusCourseRequest;
@@ -26,23 +26,28 @@ public class CourseController {
     private final LessonService lessonService;
 
     @GetMapping
-    public ResponseEntity<?> getAllCourses(
+    public ResponseEntity<?> findCourses(
             @RequestParam(required = false)
-            CourseStatus status
+            CourseStatus status,
+            @RequestParam(required = false)
+            String keyword,
+            @RequestParam(required = false)
+            Integer teacherId
     ) {
-
         List<CourseResponse> courses =
-                courseService.getAllCourses(status);
+                courseService.getAllCourses(
+                        status,
+                        keyword,
+                        teacherId
+                );
 
         return new ResponseEntity<>(
-
                 MapToAPIResponse.mapTo(
                         courses,
                         null,
                         200,
                         "Lấy danh sách khóa học thành công"
                 ),
-
                 HttpStatus.OK
         );
     }

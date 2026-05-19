@@ -1,7 +1,7 @@
 package com.example.completion_project.controller;
 
 import com.example.completion_project.mapper.MapToAPIResponse;
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.Role;
 import com.example.completion_project.model.dto.request.authReq.UpdatePasswordRequest;
 import com.example.completion_project.model.dto.request.lessonReq.LessonCreateRequest;
 import com.example.completion_project.model.dto.request.userReq.UpdateUserRoleRequest;

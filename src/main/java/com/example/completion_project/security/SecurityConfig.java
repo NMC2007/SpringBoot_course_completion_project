@@ -59,6 +59,14 @@ public class SecurityConfig {
 
 
 //                        =============================================================================================
+//                        Lessons
+                        .requestMatchers(HttpMethod.GET, "/api/v1/lessons/**")
+                        .authenticated()
+
+                        .requestMatchers("/api/v1/lessons/**")
+                        .hasAnyRole("ADMIN", "TEACHER")
+
+//                        =============================================================================================
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

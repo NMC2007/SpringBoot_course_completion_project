@@ -1,7 +1,7 @@
 package com.example.completion_project.service.impl;
 
 import com.example.completion_project.exception.*;
-import com.example.completion_project.model.Enum.Role;
+import com.example.completion_project.model.enums.Role;
 import com.example.completion_project.model.dto.request.authReq.UserCreateDTO;
 import com.example.completion_project.model.dto.request.authReq.UserLoginDTO;
 import com.example.completion_project.model.dto.request.authReq.VerifyTokenRequest;
