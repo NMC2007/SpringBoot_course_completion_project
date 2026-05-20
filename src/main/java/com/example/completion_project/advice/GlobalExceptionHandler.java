@@ -5,6 +5,7 @@ import com.example.completion_project.mapper.MapToAPIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,7 +20,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleMethodNotSupported(
             HttpRequestMethodNotSupportedException e
     ) {
-
         Map<String, Object> res = new HashMap<>();
 
         res.put(
@@ -65,6 +65,26 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(
                 MapToAPIResponse.mapTo(null, res, 403, "Truy cập bị từ chối"),
+                HttpStatus.FORBIDDEN
+        );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleSpringAccessDenied(AccessDeniedException e) {
+        Map<String, Object> res = new HashMap<>();
+
+        res.put(
+                "Lỗi phân quyền",
+                "Bạn không có quyền truy cập tài nguyên này"
+        );
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        null,
+                        res,
+                        403,
+                        "Truy cập bị từ chối"
+                ),
                 HttpStatus.FORBIDDEN
         );
     }

@@ -8,6 +8,7 @@ import com.example.completion_project.model.dto.response.lesson_progress_res.Les
 import com.example.completion_project.model.dto.response.lesson_res.LessonInfoResponse;
 import com.example.completion_project.model.dto.response.lesson_res.LessonResponse;
 import com.example.completion_project.model.entity.*;
+import com.example.completion_project.model.enums.EnrollmentStatus;
 import com.example.completion_project.repository.*;
 import com.example.completion_project.service.LessonService;
 import lombok.RequiredArgsConstructor;
@@ -300,6 +301,13 @@ public class LessonServiceImpl implements LessonService {
             );
         }
 
+        // check publish
+        if (!lesson.getIsPublished()) {
+            throw new IllegalArgumentException(
+                    "Bài học chưa được mở"
+            );
+        }
+
         LessonProgress lessonProgress = lessonProgressRepository
                 .findLessonProgress(enrollmentId, lessonId)
                 .orElseGet(() -> {
@@ -338,10 +346,10 @@ public class LessonServiceImpl implements LessonService {
                                 RoundingMode.HALF_UP
                         );
 
-        enrollment.setProgressPercent(
-                progressPercent
-        );
-
+        enrollment.setProgressPercent(progressPercent);
+        if (progressPercent == BigDecimal.valueOf(100)) {
+            enrollment.setStatus(EnrollmentStatus.COMPLETED);
+        }
         enrollmentRepository.save(enrollment);
 
         LessonProgressResponse res =
