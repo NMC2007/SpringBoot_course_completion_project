@@ -99,4 +99,24 @@ public class LessonController {
                 HttpStatus.OK
         );
     }
+
+    @DeleteMapping("/{lesson_id}")
+    public ResponseEntity<?> DeleteLesson(
+            @PathVariable("lesson_id")
+            Integer lessonId
+    ) {
+
+        String message =
+                lessonService.deleteLessonById(lessonId);
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        message,
+                        null,
+                        200,
+                        "Xoá người dùng thành công"
+                ),
+                HttpStatus.OK
+        );
+    }
 }

@@ -233,4 +233,17 @@ public class LessonServiceImpl implements LessonService {
 
         return res;
     }
+
+    @Override
+    public String deleteLessonById(Integer lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Không tìm thấy bài học"
+                        ));
+
+        lessonRepository.delete(lesson);
+
+        return "Xóa bài học thành công";
+    }
 }

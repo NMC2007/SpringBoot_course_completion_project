@@ -14,4 +14,5 @@ public interface LessonService {
     LessonInfoResponse getLessonDetail(Integer lessonId);
     LessonResponse updateLessonPublish(Integer lessonId, UpdateLessonPublishRequest req);
     LessonResponse updateLesson(Integer lessonId, UpdateLessonRequest req);
+    String deleteLessonById(Integer lessonId);
 }
