@@ -13,6 +13,7 @@ import com.example.completion_project.model.dto.response.lesson_res.LessonInfoRe
 import com.example.completion_project.model.entity.Course;
 import com.example.completion_project.model.entity.User;
 import com.example.completion_project.repository.CourseRepository;
+import com.example.completion_project.repository.EnrollmentRepository;
 import com.example.completion_project.repository.UserRepository;
 import com.example.completion_project.service.CourseService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     private final ModelMapper modelMapper;
 
@@ -300,5 +302,30 @@ public class CourseServiceImpl implements CourseService {
         );
 
         return res;
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteCourse(Integer courseId) {
+
+        Course course = courseRepository
+                .findById(courseId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Không tìm thấy khóa học"
+                        ));
+
+        boolean hasEnrollment =
+                enrollmentRepository
+                        .existsEnrollmentByCourse(courseId);
+
+        if (hasEnrollment) {
+            throw new IllegalArgumentException(
+                    "Không thể xóa khóa học vì có sinh viên đang học"
+            );
+        }
+
+        courseRepository.delete(course);
+        return "Xoá khoá học thành công";
     }
 }

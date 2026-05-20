@@ -171,4 +171,23 @@ public class CourseController {
                 HttpStatus.OK
         );
     }
+
+    @DeleteMapping("/{course_id}")
+    public ResponseEntity<?> deleteCourse(
+            @PathVariable("course_id")
+            Integer courseId
+    ) {
+
+        String message = courseService.deleteCourse(courseId);
+
+        return new ResponseEntity<>(
+                MapToAPIResponse.mapTo(
+                        message,
+                        null,
+                        200,
+                        "Xóa khóa học thành công"
+                ),
+                HttpStatus.OK
+        );
+    }
 }

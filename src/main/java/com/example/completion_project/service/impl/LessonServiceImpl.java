@@ -4,25 +4,33 @@ import com.example.completion_project.exception.ResourceNotFoundException;
 import com.example.completion_project.model.dto.request.lesson_req.LessonCreateRequest;
 import com.example.completion_project.model.dto.request.lesson_req.UpdateLessonPublishRequest;
 import com.example.completion_project.model.dto.request.lesson_req.UpdateLessonRequest;
+import com.example.completion_project.model.dto.response.lesson_progress_res.LessonProgressResponse;
 import com.example.completion_project.model.dto.response.lesson_res.LessonInfoResponse;
 import com.example.completion_project.model.dto.response.lesson_res.LessonResponse;
-import com.example.completion_project.model.entity.Course;
-import com.example.completion_project.model.entity.Lesson;
-import com.example.completion_project.repository.CourseRepository;
-import com.example.completion_project.repository.LessonRepository;
+import com.example.completion_project.model.entity.*;
+import com.example.completion_project.repository.*;
 import com.example.completion_project.service.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class LessonServiceImpl implements LessonService {
     private final LessonRepository lessonRepository;
+    private final LessonProgressRepository lessonProgressRepository;
+
     private final CourseRepository courseRepository;
+    private final UserRepository userRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     private final ModelMapper modelMapper;
 
@@ -245,5 +253,107 @@ public class LessonServiceImpl implements LessonService {
         lessonRepository.delete(lesson);
 
         return "Xóa bài học thành công";
+    }
+
+    @Override
+    public LessonProgressResponse completeLesson(Integer enrollmentId, Integer lessonId) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User student = userRepository.findUserByUsername(username)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Không tìm thấy học sinh"
+                        ));
+
+//        tìm đăng ký khoá học của học sinh hiện tại
+        Enrollment enrollment =
+                enrollmentRepository.findByIdAndStudentId(
+                                enrollmentId,
+                                student.getId()
+                        )
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Không tìm thấy đăng ký khóa học"
+                                ));
+
+//        tìm bài học
+        Lesson lesson = lessonRepository
+                .findById(lessonId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Không tìm thấy bài học"
+                        ));
+
+        // check lesson thuộc course của enrollment
+        if (
+                !lesson.getCourse().getId()
+                        .equals(
+                                enrollment.getCourse().getId()
+                        )
+        ) {
+            throw new ResourceNotFoundException(
+                    "Bài học không thuộc khóa học đã đăng ký"
+            );
+        }
+
+        LessonProgress lessonProgress = lessonProgressRepository
+                .findLessonProgress(enrollmentId, lessonId)
+                .orElseGet(() -> {
+                    LessonProgress progress =
+                            new LessonProgress();
+
+                    progress.setEnrollment(enrollment);
+                    progress.setLesson(lesson);
+
+                    return progress;
+                });
+
+        lessonProgress.setIsCompleted(true);
+        lessonProgress.setCompletedAt(LocalDateTime.now());
+
+        LessonProgress savedProgress =
+                lessonProgressRepository.save(
+                        lessonProgress
+                );
+
+        // update progressPercent
+        long completedLessons = lessonProgressRepository
+                .countCompletedLessons(enrollmentId);
+
+        long totalLessons =
+                lessonRepository.countByCourseId(
+                        enrollment.getCourse().getId()
+                );
+
+        BigDecimal progressPercent =
+                BigDecimal.valueOf(completedLessons)
+                        .multiply(BigDecimal.valueOf(100))
+                        .divide(
+                                BigDecimal.valueOf(totalLessons),
+                                2,
+                                RoundingMode.HALF_UP
+                        );
+
+        enrollment.setProgressPercent(
+                progressPercent
+        );
+
+        enrollmentRepository.save(enrollment);
+
+        LessonProgressResponse res =
+                modelMapper.map(
+                        savedProgress,
+                        LessonProgressResponse.class
+                );
+
+        res.setEnrollmentId(enrollment.getId());
+        res.setLessonId(lesson.getId());
+        res.setLessonTitle(lesson.getTitle());
+
+        return res;
     }
 }

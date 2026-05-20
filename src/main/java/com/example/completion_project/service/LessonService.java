@@ -3,6 +3,7 @@ package com.example.completion_project.service;
 import com.example.completion_project.model.dto.request.lesson_req.LessonCreateRequest;
 import com.example.completion_project.model.dto.request.lesson_req.UpdateLessonPublishRequest;
 import com.example.completion_project.model.dto.request.lesson_req.UpdateLessonRequest;
+import com.example.completion_project.model.dto.response.lesson_progress_res.LessonProgressResponse;
 import com.example.completion_project.model.dto.response.lesson_res.LessonInfoResponse;
 import com.example.completion_project.model.dto.response.lesson_res.LessonResponse;
 
@@ -15,4 +16,5 @@ public interface LessonService {
     LessonResponse updateLessonPublish(Integer lessonId, UpdateLessonPublishRequest req);
     LessonResponse updateLesson(Integer lessonId, UpdateLessonRequest req);
     String deleteLessonById(Integer lessonId);
+    LessonProgressResponse completeLesson(Integer enrollmentId, Integer lessonId);
 }

@@ -15,4 +15,5 @@ public interface CourseService {
     CourseResponse updateCourseStatus(Integer courseId, UpdateStatusCourseRequest req);
     CourseInfoResponse getPublishedCourseDetail(Integer courseId);
     CourseResponse updateCourse(Integer courseId, UpdateCourseRequest req);
+    String deleteCourse(Integer courseId);
 }

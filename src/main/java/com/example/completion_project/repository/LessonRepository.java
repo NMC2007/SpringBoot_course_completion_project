@@ -20,4 +20,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
     List<Lesson> findPublishedLessonsByCourse(
             @Param("courseId") Integer courseId
     );
+
+    long countByCourseId(Integer courseId);
 }
