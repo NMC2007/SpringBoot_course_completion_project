@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.response.userRes;
+package com.example.completion_project.model.dto.response.user_res;
 
 import com.example.completion_project.model.enums.Role;
 import lombok.*;

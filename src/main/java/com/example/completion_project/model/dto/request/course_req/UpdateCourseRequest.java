@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.courseReq;
+package com.example.completion_project.model.dto.request.course_req;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Positive;

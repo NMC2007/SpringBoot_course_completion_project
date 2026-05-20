@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.response.authRes;
+package com.example.completion_project.model.dto.response.auth_res;
 
 import lombok.Builder;
 import lombok.Getter;

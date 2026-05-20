@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.lessonReq;
+package com.example.completion_project.model.dto.request.lesson_req;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

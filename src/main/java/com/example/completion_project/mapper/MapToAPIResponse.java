@@ -1,6 +1,6 @@
 package com.example.completion_project.mapper;
 
-import com.example.completion_project.model.dto.response.authRes.ApiResponse;
+import com.example.completion_project.model.dto.response.auth_res.ApiResponse;
 
 import java.time.LocalDateTime;
 

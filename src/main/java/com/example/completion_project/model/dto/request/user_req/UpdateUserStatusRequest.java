@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.request.userReq;
+package com.example.completion_project.model.dto.request.user_req;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

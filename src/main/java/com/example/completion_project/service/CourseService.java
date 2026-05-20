@@ -1,11 +1,11 @@
 package com.example.completion_project.service;
 
 import com.example.completion_project.model.enums.CourseStatus;
-import com.example.completion_project.model.dto.request.courseReq.CourseCreateRequest;
-import com.example.completion_project.model.dto.request.courseReq.UpdateCourseRequest;
-import com.example.completion_project.model.dto.request.courseReq.UpdateStatusCourseRequest;
-import com.example.completion_project.model.dto.response.courseRes.CourseInfoResponse;
-import com.example.completion_project.model.dto.response.courseRes.CourseResponse;
+import com.example.completion_project.model.dto.request.course_req.CourseCreateRequest;
+import com.example.completion_project.model.dto.request.course_req.UpdateCourseRequest;
+import com.example.completion_project.model.dto.request.course_req.UpdateStatusCourseRequest;
+import com.example.completion_project.model.dto.response.course_res.CourseInfoResponse;
+import com.example.completion_project.model.dto.response.course_res.CourseResponse;
 
 import java.util.List;
 

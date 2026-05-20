@@ -1,16 +1,15 @@
-package com.example.completion_project.model.dto.response.courseRes;
+package com.example.completion_project.model.dto.response.course_res;
 
 import com.example.completion_project.model.enums.CourseStatus;
-import com.example.completion_project.model.dto.response.lessonRes.LessonInfoResponse;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class CourseInfoResponse {
+public class CourseResponse {
 
     private Integer id;
     private String title;
@@ -19,5 +18,6 @@ public class CourseInfoResponse {
     private BigDecimal price;
     private Integer durationHours;
     private CourseStatus status;
-    private List<LessonInfoResponse> lessons;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

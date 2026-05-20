@@ -1,11 +1,11 @@
 package com.example.completion_project.service.impl;
 
 import com.example.completion_project.exception.ResourceNotFoundException;
-import com.example.completion_project.model.dto.request.lessonReq.LessonCreateRequest;
-import com.example.completion_project.model.dto.request.lessonReq.UpdateLessonPublishRequest;
-import com.example.completion_project.model.dto.request.lessonReq.UpdateLessonRequest;
-import com.example.completion_project.model.dto.response.lessonRes.LessonInfoResponse;
-import com.example.completion_project.model.dto.response.lessonRes.LessonResponse;
+import com.example.completion_project.model.dto.request.lesson_req.LessonCreateRequest;
+import com.example.completion_project.model.dto.request.lesson_req.UpdateLessonPublishRequest;
+import com.example.completion_project.model.dto.request.lesson_req.UpdateLessonRequest;
+import com.example.completion_project.model.dto.response.lesson_res.LessonInfoResponse;
+import com.example.completion_project.model.dto.response.lesson_res.LessonResponse;
 import com.example.completion_project.model.entity.Course;
 import com.example.completion_project.model.entity.Lesson;
 import com.example.completion_project.repository.CourseRepository;

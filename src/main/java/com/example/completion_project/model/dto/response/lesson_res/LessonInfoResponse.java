@@ -1,4 +1,4 @@
-package com.example.completion_project.model.dto.response.lessonRes;
+package com.example.completion_project.model.dto.response.lesson_res;
 
 import lombok.Getter;
 import lombok.Setter;
